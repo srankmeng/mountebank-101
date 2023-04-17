@@ -1,0 +1,33 @@
+{
+  "predicates": [
+    {
+      "equals": {
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    { "equals": { "method": "POST" } },
+    { "equals": { "path": "/api/v1/order" } },
+    {
+      "jsonpath": { "selector": "$.cart[0].product_id" },
+      "caseSensitive": true,
+      "equals": { "body": "2" }
+    },
+    {
+      "jsonpath": { "selector": "$.cart[0].quantity" },
+      "caseSensitive": true,
+      "equals": { "body": "1" }
+    },
+    {
+      "jsonpath": { "selector": "$.shipping_method" },
+      "caseSensitive": true,
+      "equals": { "body": "Kerry" }
+    }
+  ],
+  "responses": [
+    {
+        "inject": "<%-stringify(filename, 'timestamp.js') %>"
+    }
+  ]
+}

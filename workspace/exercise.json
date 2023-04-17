@@ -1,0 +1,16 @@
+{
+    "port": 8000,
+    "protocol": "http",
+    "defaultResponse": {
+      "statusCode": 404,
+      "headers": {
+        "Connection": "Keep-Alive",
+        "Content-Length": 0
+      }
+    },
+    "stubs": [
+      <% include exercise-product.json %>,
+      <% include exercise-order.json %>,
+      <% include exercise-payment.json %>
+    ]
+  }

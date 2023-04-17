@@ -1,0 +1,180 @@
+{
+  "predicates": [
+    {
+      "equals": {
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "equals": {
+        "path": "/api/v1/product"
+      }
+    },
+    {
+      "equals": {
+        "query": { "q": "robot" }
+      }
+    }
+  ],
+  "responses": [
+    {
+      "is": {
+        "statusCode": 200,
+        "headers": { "Content-Type": "application/json" },
+        "body": {
+          "id": 3,
+          "product_name": "Alpha Bot",
+          "product_price": 33.95,
+          "product_image": "/Alpha Bot.png"
+        }
+      }
+    }
+  ]
+},
+{
+  "predicates": [
+    {
+      "equals": {
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    { "equals": { "method": "GET" } },
+    { "equals": { "path": "/api/v1/product" } }
+  ],
+  "responses": [
+    {
+      "is": {
+        "statusCode": 200,
+        "headers": { "Content-Type": "application/json" },
+        "body": "<%- stringify(filename, 'products.json') %>"
+      }
+    }
+  ]
+},
+{
+  "predicates": [
+    {
+      "equals": {
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    { "equals": { "method": "GET" } },
+    { "equals": { "path": "/api/v1/product/1" } }
+  ],
+  "responses": [
+    {
+      "is": {
+        "statusCode": 200,
+        "headers": { "Content-Type": "application/json" },
+        "body": {
+          "id": "$ID",
+          "product_name": "Balance Training Bicycle",
+          "product_price": 119.95,
+          "product_image": "/Balance_Training_Bicycle.png"
+        }
+      },
+      "_behaviors": {
+        "wait": 1000,
+        "copy": [
+          {
+            "from": "path",
+            "into": "$ID",
+            "using": {
+              "method": "regex",
+              "selector": "\\d+$"
+            }
+          }
+        ],
+        "decorate": "(config) => { config.response.body.message = 'test' }"
+      }
+    }
+  ]
+},
+{
+  "predicates": [
+    {
+      "equals": {
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    { "equals": { "method": "GET" } },
+    { "equals": { "path": "/api/v1/product/2" } }
+  ],
+  "responses": [
+    {
+      "is": {
+        "statusCode": 200,
+        "headers": { "Content-Type": "application/json" },
+        "body": {
+          "id": 2,
+          "product_name": "43 Piece dinner Set",
+          "product_price": 12.95,
+          "product_image": "/43_Piece_dinner_Set.png"
+        }
+      }
+    }
+  ]
+},
+{
+  "predicates": [
+    {
+      "equals": {
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    { "equals": { "method": "GET" } },
+    { "equals": { "path": "/api/v1/product/10" } }
+  ],
+  "responses": [
+    {
+      "inject": "<%-stringify(filename, 'validateItem.js') %>"
+    }
+  ]
+},
+{
+  "predicates": [
+    {
+      "equals": {
+        "method": "POST"
+      }
+    },
+    {
+      "equals": {
+        "path": "/api/v1/product"
+      }
+    },
+    {
+      "jsonpath": { "selector": "$.product_name" },
+      "caseSensitive": true,
+      "equals": { "body": "robot" }
+    },
+    {
+      "jsonpath": { "selector": "$.product_price" },
+      "caseSensitive": true,
+      "equals": { "body": 100 }
+    },
+    {
+      "jsonpath": { "selector": "$.product_image" },
+      "caseSensitive": true,
+      "equals": { "body": "/robot.png" }
+    }
+  ],
+  "responses": [
+    {
+      "is": {
+        "statusCode": 201,
+        "headers": { "Content-Types": "application/json" }
+      }
+    }
+  ]
+}

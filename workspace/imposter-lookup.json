@@ -1,0 +1,52 @@
+{
+    "protocol": "http",
+    "port": 8000,
+    "stubs": [
+      {
+        "predicates": [
+          {
+            "matches": { "path": "/api/v1/product/\\d+" },
+            "caseSensitive": true
+          },
+          {
+            "equals": {
+              "method": "GET",
+              "headers": { "Content-Type": "application/json" }
+            }
+          }
+        ],
+        "responses": [
+          {
+            "is": {
+              "statusCode": 200,
+              "headers": { "Content-Type": "application/json" },
+              "body": {
+                "id": "${row}['id']",
+                "product_name": "${row}['name']",
+                "product_price": "${row}[price]",
+                "product_image": "${row}[image]"
+              }
+            },
+            "_behaviors": {
+              "lookup": [
+                {
+                  "key": {
+                    "from": "path",
+                    "using": {
+                      "method": "regex",
+                      "selector": "product/(\\w+)"
+                    },
+                    "index": 1
+                  },
+                  "fromDataSource": {
+                    "csv": { "path": "workspace/products.csv", "keyColumn": "id" }
+                  },
+                  "into": "${row}"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
